@@ -10,4 +10,11 @@ export class UserController {
 
 		return res.status(response.status).json(response.data);
 	}
+
+	async login(req: Request, res: Response) {
+		const { email, password } = req.body;
+		const response = await this.userService.login({ email, password });
+
+		return res.status(response.status).json(response.data);
+	}
 }

@@ -9,7 +9,7 @@ services:
     volumes:
       - ./app/backend:/app
     environment:
-      DATABASE_URL: mysql://root:randompassword@localhost:3306/monitoria
+      DATABASE_URL: mysql://root:randompassword@db:3306/monitoria
     depends_on:
       db:
         condition: service_healthy
