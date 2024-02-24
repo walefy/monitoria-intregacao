@@ -1,0 +1,27 @@
+version: '3'
+
+services:
+  backend:
+    build: ./app/backend
+    ports:
+      - "3001:3001"
+    command: dev
+    volumes:
+      - ./app/backend:/app
+    environment:
+      DATABASE_URL: mysql://root:randompassword@localhost:3306/monitoria
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: mysql:8.3.0
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: randompassword
+      MYSQL_DATABASE: monitoria
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
+      timeout: 20s
+      retries: 10
