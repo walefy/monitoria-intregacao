@@ -137,4 +137,18 @@ export class UserService {
 		const { password, ...userWithoutPass } = updatedUser;
 		return { status: HttpStatusCode.OK, data: userWithoutPass };
 	}
+
+	async delete(id: number): Promise<IServiceResponse<null>> {
+		const user = await this.userModel.findById(id);
+	
+		if (!user) {
+			return {
+				status: HttpStatusCode.NOT_FOUND,
+				data: { message: 'User not found' }
+			};
+		}
+
+		await this.userModel.delete(id);
+		return { status: HttpStatusCode.OK, data: null };
+	}
 }
