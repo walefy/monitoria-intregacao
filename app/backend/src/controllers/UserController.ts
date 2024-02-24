@@ -17,4 +17,18 @@ export class UserController {
 
 		return res.status(response.status).json(response.data);
 	}
+
+	async findById(req: Request, res: Response) {
+		const { id } = req.params;
+		const response = await this.userService.findById(+id);
+
+		return res.status(response.status).json(response.data);
+	}
+
+	async update(req: Request, res: Response) {
+		const { id } = req.params;
+		const response = await this.userService.update(+id, req.body);
+
+		return res.status(response.status).json(response.data);
+	}
 }

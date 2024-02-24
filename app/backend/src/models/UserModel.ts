@@ -1,5 +1,6 @@
 import { PrismaClient, User } from '@prisma/client';
 import { IUserModel } from '../interfaces/IUserModel';
+import { IUserWithPosts } from '../interfaces/IUser';
 
 export class UserModel implements IUserModel {
 	constructor(private client = new PrismaClient()) {}
@@ -12,15 +13,29 @@ export class UserModel implements IUserModel {
 		return this.client.user.findMany();
 	}
 
-	findByEmail(email: string): Promise<User | null> {
-		return this.client.user.findFirst({ where: { email }, include: { posts: true } });
+	findByEmail(email: string): Promise<IUserWithPosts | null> {
+		return this.client.user.findFirst({
+			where: { email },
+			include: {
+				posts: {
+					select: { title: true, content: true, id: true }
+				}
+			}
+		});
 	}
 
-	findById(id: number): Promise<User | null> {
-		return this.client.user.findUnique({ where: { id }, include: { posts: true } });
+	findById(id: number): Promise<IUserWithPosts | null> {
+		return this.client.user.findUnique({
+			where: { id },
+			include: {
+				posts: {
+					select: { title: true, content: true, id: true }
+				}
+			}
+		});
 	}
 
-	update(id: User['id'], user: Omit<User, 'id' | 'posts'>): Promise<User | null> {
+	update(id: User['id'], user: Partial<Omit<User, 'id'>>): Promise<User | null> {
 		return this.client.user.update({ where: { id }, data: user });
 	}
 
