@@ -1,5 +1,6 @@
 import express from 'express';
 import cors from 'cors';
+import { mainRouter } from './routes/mainRouter';
 
 export class App {
 	public app: express.Express;
@@ -19,7 +20,7 @@ export class App {
 	}
 
 	private routes(): void {
-		console.warn('Method not implemented.');
+		this.app.use(mainRouter);
 	}
 
 	public start(port: number): void {
